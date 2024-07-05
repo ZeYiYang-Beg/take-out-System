@@ -26,6 +26,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -108,6 +110,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         long total = page.getTotal();
         List<Employee> records = page.getResult();
         return new PageResult(total, records);
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        // update employee set status = #{} where id = #{id}
+//        Employee employee = new Employee();
+//        employee.setId(id);
+//        employee.setStatus(status);
+        Employee employee = Employee.builder().status(status).id(id).build();
+        employeeMapper.update(employee);
     }
 
 }
