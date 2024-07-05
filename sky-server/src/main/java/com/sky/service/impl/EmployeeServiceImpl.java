@@ -112,6 +112,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return new PageResult(total, records);
     }
 
+    /**
+     * 修改员工的状态
+     * @param status
+     * @param id
+     */
     @Override
     public void startOrStop(Integer status, Long id) {
         // update employee set status = #{} where id = #{id}
@@ -121,5 +126,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = Employee.builder().status(status).id(id).build();
         employeeMapper.update(employee);
     }
+
+    /**
+     * 根据员工的ID查询信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Employee selectById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        employee.setPassword("******");
+        return employee;
+    }
+
+    /**
+     * 根据员工的ID修改信息
+     * @param employeeDTO
+     */
+    @Override
+    public void updateById(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employee.setUpdateTime(LocalDateTime.now());
+        employeeMapper.update(employee);
+    }
+
 
 }
