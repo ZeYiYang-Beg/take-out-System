@@ -9,9 +9,12 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
+import com.sky.entity.SetmealDish;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -21,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.sky.mapper.SetmealDishMapper;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +42,8 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
     private SetmealDishMapper setmealDishmapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
 
     @Transactional
     @Override
@@ -127,6 +134,27 @@ public class DishServiceImpl implements DishService {
             });
             dishFlavorMapper.insertBatch(flavors);
         }
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Dish dish = dishMapper.getById(id);
+        dishMapper.updateStatus(status, id);
+
+        // 如果下架，那么套餐也要下架
+        if (status == StatusConstant.DISABLE) {
+            List<Long> dishIds = new ArrayList<>();
+            dishIds.add(id);
+            List<Long> setmealIdsByDishId = setmealDishmapper.getSetmealIdsByDishId(dishIds);
+            if (setmealIdsByDishId != null && setmealIdsByDishId.size() > 0) {
+                for (Long longItem : setmealIdsByDishId) {
+                    Setmeal setmeal = new Setmeal().builder().id(id).status(status).build();
+                    setmealMapper.update(setmeal);
+                }
+            }
+
+        }
+
     }
 
 

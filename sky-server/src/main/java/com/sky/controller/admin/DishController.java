@@ -31,6 +31,11 @@ public class DishController {
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableResolver;
 
+    /**
+     * 新增菜品
+     * @param dishDTO
+     * @return
+     */
     @PostMapping
     @ApiOperation("新增菜品")
     public Result save(@RequestBody DishDTO dishDTO) {
@@ -66,7 +71,7 @@ public class DishController {
     }
 
     /**
-     *
+     * 根据ID查询菜品
      * @param id
      * @return
      */
@@ -88,6 +93,19 @@ public class DishController {
     public Result update(@RequestBody DishDTO dishDTO) {
         log.info("修改菜品: {}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
+        return Result.success();
+    }
+
+    /**
+     * 菜品的起售与停售
+     * @param status
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜品的起售停售操作")
+    public Result update(@PathVariable Integer status, Long id) {
+        log.info("菜品的起售停售操作: {}", id);
+        dishService.startOrStop(status, id);
         return Result.success();
     }
 }
