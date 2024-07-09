@@ -43,4 +43,11 @@ public interface DishMapper {
     void updateStatus(Integer status, Long id);
 
     List<Dish> getDishesByCategoryId(Dish dish);
+
+    /**
+     * 动态SQL查询
+     * @param dish
+     * @return
+     */
+    List<Dish> list(Dish dish);
 }
