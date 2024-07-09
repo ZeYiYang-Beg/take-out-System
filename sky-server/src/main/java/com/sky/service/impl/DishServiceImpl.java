@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sky.mapper.SetmealDishMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -155,6 +156,12 @@ public class DishServiceImpl implements DishService {
 
         }
 
+    }
+
+    @Override
+    public List<Dish> list(Long categoryId) {
+        Dish dish = new Dish().builder().categoryId(categoryId).status(StatusConstant.ENABLE).build();
+        return dishMapper.getDishesByCategoryId(dish);
     }
 
 

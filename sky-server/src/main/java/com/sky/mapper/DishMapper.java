@@ -8,6 +8,8 @@ import com.sky.enumeration.OperationType;
 import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 /**
  * @author
  * @version 1.0
@@ -39,4 +41,6 @@ public interface DishMapper {
     @AutoFill(OperationType.UPDATE)
     @Update("update dish set status = #{status} where id = #{id}")
     void updateStatus(Integer status, Long id);
+
+    List<Dish> getDishesByCategoryId(Dish dish);
 }
