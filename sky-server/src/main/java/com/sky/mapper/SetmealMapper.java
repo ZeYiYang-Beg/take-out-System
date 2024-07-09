@@ -10,6 +10,7 @@ import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.List;
 
